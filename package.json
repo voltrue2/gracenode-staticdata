@@ -1,0 +1,27 @@
+{
+	"name": "gracenode-staticdata",
+	"description": "staticdata module for gracenode framework",
+	"version": "0.1.0",
+	"author": "Nobuyori Takahashi <voltrue2@yahoo.com>",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/voltrue2/gracenode-staticdata.git"
+	},
+	"dependencies": {
+		"async": "0.8.0"
+	},
+	"devDependencies": {
+		"mocha": "1.18.2"
+	},
+	"engine": "node >= 0.10.20",
+	"contributors": [],
+	"keywords": [
+		"gracenode",
+		"framework",
+		"static",
+		"file",
+		"JSON",
+		"CSV"
+	],
+	"license": "MIT"
+}
