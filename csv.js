@@ -20,7 +20,7 @@ Csv.prototype.toObject = function (csv) {
 Csv.prototype._getRows = function (csv) {
 	// replace all linebreaks with \r to elimitnate OS dependent EOL issues
 	csv = csv.replace(/(\r\r|\n)/gm, '\r');
-	// find and replace escaped delimiter with \t\t
+	// find and replace escaped comma (\,) with \t\t
 	csv = csv.replace(/\\,/g, this._placeHolder);
 	return csv.split('\r');
 };
@@ -83,9 +83,10 @@ Csv.prototype._parseRow = function (row) {
 		cols.push(value);
 	}
 
-	// revert the place holder back to escaped delimiter
+	// revert the place holder back to escaped comma (\,)
 	for (var i = 0, len = cols.length; i < len; i++) {
-		cols[i] = cols[i].replace(this._placeHolder, this._delimiter);
+		var reg = new RegExp(this._placeHolder, 'g');
+		cols[i] = cols[i].replace(reg, ',');
 	}
 	return cols;
 };
