@@ -4,7 +4,7 @@ module.exports.create = function (quote, delimiter) {
 };
 
 function Csv(quote, delimiter) {
-	this._placeHolder = '\p\p';
+	this._placeHolder = '{{p}}';
 	this._quote = quote || '';
 	this._delimiter = delimiter;
 }
@@ -20,7 +20,7 @@ Csv.prototype.toObject = function (csv) {
 Csv.prototype._getRows = function (csv) {
 	// replace all linebreaks with \r to elimitnate OS dependent EOL issues
 	csv = csv.replace(/(\r\r|\n)/gm, '\r');
-	// find and replace escaped comma (\,) with \t\t
+	// find and replace escaped comma (\,) with place holder
 	csv = csv.replace(/\\,/g, this._placeHolder);
 	return csv.split('\r');
 };
@@ -36,7 +36,7 @@ Csv.prototype._parseRows = function (rows) {
 		}
 		
 		var row = this._parseRow(rows[i]);
-		
+
 		if (i === 0) {
 			// we assume the first row to be column names
 			colNames = row;
