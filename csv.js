@@ -4,7 +4,7 @@ module.exports.create = function (quote, delimiter) {
 };
 
 function Csv(quote, delimiter) {
-	this._placeHolder = '\t\t';
+	this._placeHolder = '\p\p';
 	this._quote = quote || '';
 	this._delimiter = delimiter;
 }
