@@ -168,7 +168,7 @@ function setupChangeListener(path) {
 
 function toObject(data) {
 	var parsed = csv.parse(data);
-	var obj = parser.execute(parserd);
+	var obj = parser.execute(parsed);
 	log.verbose(obj);
 	return obj;
 }
