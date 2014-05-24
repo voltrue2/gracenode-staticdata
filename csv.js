@@ -1,128 +1,102 @@
+var delimiterEscapeMap = {
+	'\t': '\\t',
+	',': '\\,',
+	'|': '\\|',
+	';': '\\;',
+	'^': '\\^'
+};
+var delimiter;
+var escaped;
 
-module.exports.create = function (quote, delimiter) {
-	return new Csv(quote, delimiter);
+module.exports.setup = function (delimiterIn) {
+	delimiter = delimiterIn;
+	escaped = delimiterEscapeMap[delimiter] || null;
+	if (!escaped) {
+		throw new Error('given delimiter is not supported: ' + delimiter);
+	}
 };
 
-function Csv(quote, delimiter) {
-	this._placeHolder = '{{p}}';
-	this._quote = quote || '';
-	this._delimiter = delimiter;
+module.exports.parse = parse;
+
+function parse(data) {
+	var list = [];
+	var rows = separateRows(data);
+	for (var i = 0, len = rows.length; i < len; i++) {
+		var separated = separateColumns(rows[i]);
+		if (separated.length) {
+			list.push(separated);
+		}	
+	}
+	return list;
 }
 
-Csv.prototype.toObject = function (csv) {
-	// separate CSV string by row
-	var rows = this._getRows(csv);
-	// parse each row
-	var parsed = this._parseRows(rows);
-	return parsed;
-};
-
-Csv.prototype._getRows = function (csv) {
+function separateRows(data) {
 	// replace all linebreaks with \r to elimitnate OS dependent EOL issues
-	csv = csv.replace(/(\r\r|\n)/gm, '\r');
-	// find and replace escaped comma (\,) with place holder
-	csv = csv.replace(/\\,/g, this._placeHolder);
-	return csv.split('\r');
-};
+	data = data.replace(/(\r\r|\n)/gm, '\r');
+	return data.split('\r');
+}
 
-Csv.prototype._parseRows = function (rows) {
-	var parsedRows = [];
-	var colNames = null;
-	var colLen = 0;
-	for (var i = 0, len = rows.length; i < len; i++) {
-		if (!rows[i]) {
-			// ignore empty row
-			continue;
-		}
-		
-		var row = this._parseRow(rows[i]);
-
-		if (i === 0) {
-			// we assume the first row to be column names
-			colNames = row;
-			colLen = colNames.length;
+function separateColumns(row) {
+	// separated list of columns
+	var columns = [];
+	// copy of row to keep track of the current position
+	var tmp = row;
+	// delimiter poisition
+	var index = tmp.indexOf(delimiter);
+	// remember the escaped column value to be pushed in later
+	var escapedCol = '';
+	// find and separate (if delimiter is escaped with \ ignore and skip)
+	while (index !== -1) {
+		// split
+		var separated = tmp.substring(0, index + 1);
+		// check for escape
+		if (separated.indexOf(escaped) === -1) {
+			// if there is escaped column value that needs to be pushed in, push it in now
+			if (escapedCol !== '') {
+				columns.push(typeCast(escapedCol + separated.substring(0, separated.length - 1)));
+				// reset escaped
+				escapedCol = '';
+			} else {
+				// delimiter is not escaped. we keep the separated item as a column value
+				columns.push(typeCast(separated.substring(0, separated.length - 1)));
+			}
 		} else {
-			parsedRows.push(this._createRowObj(colNames, colLen, row));			
+			// escaped delimiter detected. append it to escaped
+			escapedCol += separated;
 		}
+		// update the current position
+		tmp = tmp.replace(separated, '');
+		index = tmp.indexOf(delimiter);
 	}
+	return columns;
+}
 
-	return parsedRows;
-};
-
-Csv.prototype._parseRow = function (row) {
-	var startIndex = '';
-	var endIndex = startIndex + this._delimiter;
-	var startIndexLen = startIndex.length;
-	var cols = [];
-
-	while (row.length) {
-		var startPos = row.indexOf(startIndex) + startIndexLen;
-		var endPos = row.indexOf(endIndex);
-		var match = row.substring(startPos, endPos);
-
-		var value = '';		
-
-		// check if we have reached the end
-		if (!match || match === startIndex) {
-			value = row.substring(row.indexOf(startIndex) + startIndexLen, row.lastIndexOf(startIndex));
-			row = '';
-		} else {
-			value = match;
-
-			row = row.replace(startIndex + match + endIndex, '');
-		}
-	
-		// strip quote if present
-		if (value.indexOf(this._quote) === 0) {
-			value = value.substring(1);
-		}
-		if (value.substring(value.length - 1) === this._quote) {
-			value = value.substring(0, value.length - 1);
-		}
-	
-		cols.push(value);
-	}
-
-	// revert the place holder back to escaped comma (\,)
-	for (var i = 0, len = cols.length; i < len; i++) {
-		var reg = new RegExp(this._placeHolder, 'g');
-		cols[i] = cols[i].replace(reg, ',');
-	}
-	return cols;
-};
-
-Csv.prototype._createRowObj = function (colNames, colNameLen, cols) {
-	if (colNameLen !== cols.length) {
-		throw new Error('incorrect CSV file: ' + JSON.stringify(colNames) + ' > ' + JSON.stringify(cols));
-	}
-
-	var item = {};
-	for (var i = 0, len = colNameLen; i < len; i++) {
-		item[colNames[i]] = correctDataType(cols[i]);
-	}
-	return item;
-};
-
-function correctDataType(data) {
+function typeCast(data) {
 	if (data && data.indexOf('0x') === -1 && !isNaN(data)) {
-		var intOrHex = parseInt(data, 10);
-		var floatNum = parseFloat(data);
-		if (floatNum && intOrHex !== floatNum) {
-			return floatNum;
+		// numeric data
+		var intOrHexVal = parseInt(data, 10);
+		var floatVal = parseFloat(data);
+		if (floatVal && intOrHexVal !== floatVal) {
+			return floatVal;
 		} else {
-			return intOrHex;
+			return intOrHexVal;
 		}
-	} else if (data === 'TRUE' || data === 'true') {
-		return true;
-	} else if (data === 'FALSE' || data === 'false') {
-		return false;
-	} else if (data === 'NULL' || data === 'null') {
-		return null;
-	} else {
-		try {
-			return JSON.parse(data);
-		} catch (e) {
-			return data;
-		}
+	}
+	// non numeric data
+	switch (data.toLowerCase()) {
+		case 'true':
+			return true;
+		case 'false':
+			return false;
+		case 'null':
+			return null;
+		case 'undefined':
+			return undefined;
+		default:
+			try {
+				return JSON.parse(data);
+			} catch (e) {
+				return data;
+			}
 	}
 }
