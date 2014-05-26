@@ -44,7 +44,6 @@ Configurations
 		"staticdata": {
 			"path": "directory path to the static files",
 			"delimiter": optional and defaults to ',', // for parsing CSV files
-			"quote": optional and defaults to '"' // for parsing CSV files
 			"index": { // optional // for getOneByIndex and getManyByIndex
 				"staticFileName": ["indexName", [...]]
 			}
@@ -52,6 +51,32 @@ Configurations
 	}
 }
 ```
+
+## CSV
+
+### Supported CSV Delimiters
+
+gracenode-staticdata module supports the following delimiters in CSV file format:
+
+- Comma (,)
+- Tab (\t)
+- Semicolon (;)
+- Caret (^)
+- Vertical bar (|)
+
+### Escaping Characters
+
+If your CSV data contains the same characters as the deimiter, the characters must be escaped with a backslash (\).
+
+Example (delimiter is ,):
+
+```
+"id","name","age"
+100,"Marley, Bob",33
+101,"Harper, Ben",45
+```
+
+***
 
 #####API: *csvToObj*
 

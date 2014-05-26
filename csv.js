@@ -40,15 +40,14 @@ function separateColumns(row) {
 	// separated list of columns
 	var columns = [];
 	// copy of row to keep track of the current position
-	var tmp = row;
 	// delimiter poisition
-	var index = tmp.indexOf(delimiter);
+	var index = row.indexOf(delimiter);
 	// remember the escaped column value to be pushed in later
 	var escapedCol = '';
 	// find and separate (if delimiter is escaped with \ ignore and skip)
 	while (index !== -1) {
 		// split
-		var separated = tmp.substring(0, index + 1);
+		var separated = row.substring(0, index + 1);
 		// check for escape
 		if (separated.indexOf(escaped) === -1) {
 			// if there is escaped column value that needs to be pushed in, push it in now
@@ -65,24 +64,24 @@ function separateColumns(row) {
 			escapedCol += separated;
 		}
 		// update the current position
-		tmp = tmp.replace(separated, '');
-		index = tmp.indexOf(delimiter);
+		row = row.replace(separated, '');
+		index = row.indexOf(delimiter);
 	}
 	// check for the left over
-	if (tmp !== '') {
+	if (row !== '') {
 		if (escapedCol !== '') {
-			// both tmp and escapedCol
-			columns.push(typeCast(escapedCol + tmp));
+			// both row and escapedCol
+			columns.push(typeCast(escapedCol + row));
 		} else {
-			// tmp only
-			columns.push(typeCast(tmp));
+			// row only
+			columns.push(typeCast(row));
 		}
 	}
 	return columns;
 }
 
 function typeCast(data) {
-	// strip double quotes
+	// trim double quotes
 	if (data.indexOf('"') === 0) {
 		data = data.substring(1);
 	}
