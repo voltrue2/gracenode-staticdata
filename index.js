@@ -80,7 +80,7 @@ module.exports.create = function (dataName) {
 };
 
 module.exports.csvToObj = function (csvData) {
-	return toObject(csvData);
+	return toObject('', csvData);
 };
 
 function readFile(path, cb) {
@@ -104,7 +104,7 @@ function readFile(path, cb) {
 
 		switch (type) {
 			case 'csv':
-				data = toObject(data);
+				data = toObject(path, data);
 				break;
 			case 'json':
 				try {
@@ -166,9 +166,9 @@ function setupChangeListener(path) {
 	});
 }
 
-function toObject(data) {
-	var parsed = csv.parse(data);
-	var obj = parser.execute(parsed);
+function toObject(file, data) {
+	var parsed = csv.parse(file, data);
+	var obj = parser.execute(parsed.file, parsed.data);
 	log.verbose(obj);
 	return obj;
 }

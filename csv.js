@@ -18,7 +18,7 @@ module.exports.setup = function (delimiterIn) {
 
 module.exports.parse = parse;
 
-function parse(data) {
+function parse(filePath, data) {
 	var list = [];
 	var rows = separateRows(data);
 	for (var i = 0, len = rows.length; i < len; i++) {
@@ -27,7 +27,7 @@ function parse(data) {
 			list.push(separated);
 		}	
 	}
-	return list;
+	return { file: filePath, data: list };
 }
 
 function separateRows(data) {
