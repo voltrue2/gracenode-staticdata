@@ -46,7 +46,8 @@ Configurations
 			"delimiter": optional and defaults to ',', // for parsing CSV files
 			"index": { // optional // for getOneByIndex and getManyByIndex
 				"staticFileName": ["indexName", [...]]
-			}
+			},
+			"maxOpenFiles": <int> // optional. the number of opened and read files at once on set up. default is 100
 		}
 	}
 }

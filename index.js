@@ -24,6 +24,8 @@ var csv = require('./csv');
 var parser = require('./parser');
 var log = gracenode.log.create('staticdata');
 
+// maximum number of files to be opened and read at once on setup
+var maxOpenFiles = 100;
 var config;
 var delimiter = ',';
 var quote = '"';
@@ -42,6 +44,9 @@ module.exports.readConfig = function (configIn) {
 	if (config.quote !== undefined) {
 		quote = config.quote;
 	}
+	if (config.maxOpenFiles > 0) {
+		maxOpenFiles = config.maxOpenFiles;
+	}
 	// set up CSV parser
 	csv.setup(delimiter);
 };
@@ -52,7 +57,7 @@ module.exports.setup = function (cb) {
 		if (error) {
 			return cb(error);
 		}
-		async.eachSeries(list, function (item, nextCallback) {
+		async.eachLimit(list, maxOpenFiles, function (item, nextCallback) {
 			readFile(item.file, nextCallback);
 		}, cb);
 	});
