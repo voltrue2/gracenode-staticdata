@@ -63,4 +63,13 @@ describe('gracenode staticdata module ->', function () {
 		assert.equal(map, null);
 	});
 
+	it('Can get value only', function () {
+		var sd = gn.staticdata.create('map');
+		var list = sd.getAll(['value']);
+		for (var i = 0, len = list.length; i < len; i++) {
+			assert(list[i].value);
+			assert.equal(list[i].name, undefined);
+		}
+	});
+
 });
