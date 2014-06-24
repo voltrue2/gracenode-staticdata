@@ -63,7 +63,7 @@ describe('gracenode staticdata module ->', function () {
 		assert.equal(map, null);
 	});
 
-	it('Can get value only', function () {
+	it('Can get value property only', function () {
 		var sd = gn.staticdata.create('map');
 		var list = sd.getAll(['value']);
 		for (var i = 0, len = list.length; i < len; i++) {
