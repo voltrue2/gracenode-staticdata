@@ -105,25 +105,27 @@ var example = gracenode.staticdata.create('example');
 
 > **getOneByIndex**
 <pre>
-mixed getOneByIndex(String indexName, String indexKey)
+mixed getOneByIndex(String indexName, String indexKey, Array props)
 </pre>
 **getManyByIndex**
 <pre>
-mixed getManyByIndex(String indexName, Array indexKeyList)
+mixed getManyByIndex(String indexName, Array indexKeyList, Array props)
 </pre>
 **getOne**
 <pre>
-mixed getOne(mixed key)
+mixed getOne(mixed key, Array props)
 </pre>
 **getMany**
 <pre>
-mixed getMany(Array keyList)
+mixed getMany(Array keyList, Array props)
 </pre>
 **getAll**
 <pre>
-mixed getAll()
+mixed getAll(Array props)
 </pre>
 **getAllByIndexName**
 <pre>
-mixed getAllByIndexName(String indexName)
+mixed getAllByIndexName(String indexName, Array props)
 </pre>
+
+### All get methods accepts an array of property names as an option to retrieve ONLY the given properties

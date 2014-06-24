@@ -221,7 +221,7 @@ function StaticData(name, src) {
 	});
 }
 
-StaticData.prototype.getOneByIndex = function (indexName, key) {
+StaticData.prototype.getOneByIndex = function (indexName, key, props) {
 	if (!this._indexMap) {
 		return null;
 	}
@@ -233,54 +233,54 @@ StaticData.prototype.getOneByIndex = function (indexName, key) {
 	var res = data[key];
 
 	if (typeof res === 'object') {
-		return gracenode.lib.cloneObj(res);
+		return gracenode.lib.cloneObj(res, props);
 	}
 
 	return res;
 };
 
-StaticData.prototype.getManyByIndex = function (indexName, keyList) {
+StaticData.prototype.getManyByIndex = function (indexName, keyList, props) {
 	var res = {};
 	for (var i = 0, len = keyList.length; i < len; i++) {
 		var key = keyList[i];
-		res[key] = this.getOneByIndex(indexName, key);
+		res[key] = this.getOneByIndex(indexName, key, props);
 	}	
 	return res;
 };
 
-StaticData.prototype.getOne = function (index) {
+StaticData.prototype.getOne = function (index, props) {
 	var data = this._src[index];
 	if (data === undefined) {
 		return null;
 	}
 
 	if (typeof data === 'object') {
-		return gracenode.lib.cloneObj(data);		
+		return gracenode.lib.cloneObj(data, props);		
 	}
 	
 	return data;
 };
 
-StaticData.prototype.getMany = function (indexList) {
+StaticData.prototype.getMany = function (indexList, props) {
 	var res = {};
 	for (var i = 0, len = indexList.length; i < len; i++) {
 		var key = indexList[i];
-		res[key] = this.getOne(key);
+		res[key] = this.getOne(key, props);
 	}
 
 	return res;
 };
 
-StaticData.prototype.getAll = function () {
-	return gracenode.lib.cloneObj(this._src);
+StaticData.prototype.getAll = function (props) {
+	return gracenode.lib.cloneObj(this._src, props);
 };
 
-StaticData.prototype.getAllByIndexName = function (indexName) {
+StaticData.prototype.getAllByIndexName = function (indexName, props) {
 	if (!this._indexMap || this._indexMap[indexName] === undefined) {
 		return null;
 	}
 
-	return gracenode.lib.cloneObj(this._indexMap[indexName]);
+	return gracenode.lib.cloneObj(this._indexMap[indexName], props);
 };
 
 StaticData.prototype.update = function (src) {
