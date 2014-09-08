@@ -288,3 +288,14 @@ StaticData.prototype.update = function (src) {
 	this._src = src.data;
 	this._indexMap = src.indexMap;
 };
+
+/**
+* Allow to add indices without config files.
+* @param {array} indexNames - Contains the names of indices you want to create.
+*/
+
+StaticData.prototype.mapIndex = function (indexNames) {
+
+	this._indexMap = mapIndex(this._src, indexNames);
+
+}
