@@ -298,4 +298,4 @@ StaticData.prototype.mapIndex = function (indexNames) {
 
 	this._indexMap = mapIndex(this._src, indexNames);
 
-}
+};
