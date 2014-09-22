@@ -17,7 +17,8 @@
 			"path": "gracenode-staticdata/test/data/",
 			"delimiter": ",",
 			"index": {
-				"map.csv": [ "name" ]
+				"map.csv": [ "name" ],
+				"sample.csv": [ "level" ]
 			}
 		}
 	}

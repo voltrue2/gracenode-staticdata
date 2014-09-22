@@ -2,6 +2,26 @@
 
 This is a manually maintained update history log.
 
+## Version 0.2.0
+
+## Added
+
+#### gracenode-staticdata module removes none-printable characters in  CSV files
+
+## Changed
+
+None
+
+## Deprecated
+
+None
+
+## Removed
+
+None
+
+***
+
 ## Version 0.1.11
 
 ## Added
