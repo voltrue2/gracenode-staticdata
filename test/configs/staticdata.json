@@ -18,7 +18,9 @@
 			"delimiter": ",",
 			"index": {
 				"map.csv": [ "name" ],
-				"sample.csv": [ "level" ]
+				"sample.csv": [ "level" ],
+				"parent.csv": [ "name" ],
+				"child.csv": [ "size" ]
 			}
 		}
 	}

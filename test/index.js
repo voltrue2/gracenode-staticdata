@@ -78,4 +78,16 @@ describe('gracenode staticdata module ->', function () {
 		assert(data);
 	});
 
+	it('Can inflate a staticdata object with another', function () {
+		var parent = gn.staticdata.create('parent');
+		var child = gn.staticdata.create('child');
+		parent.inflate(child, 'size', 'size');
+		var logger = gn.log.create('test');
+		var bob = parent.getOneByIndex('name', 'Bob');
+		assert.equal(bob.name, 'Bob');
+		assert.equal(bob.size.size, 10);
+		assert.equal(bob.size.name, 'Regular');
+		assert.equal(bob.size.id, 3);
+	});
+
 });

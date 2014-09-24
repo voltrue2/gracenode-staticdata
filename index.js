@@ -189,19 +189,15 @@ function mapIndex(data, indexNames) {
 					map[indexName] = {};
 				}
 				var index = item[indexName];
-				var itemObj = {};
-				for (var key in item) {
-					itemObj[key] = item[key];
-				}
 				if (map[indexName][index]) {
 					// index is not unique
 					if (!Array.isArray(map[indexName][index])) {
 						map[indexName][index] = [map[indexName][index]];
 					}
-					map[indexName][index].push(itemObj);
+					map[indexName][index].push(item);
 				} else {
 					// index is unique or this is the first item of the index
-					map[indexName][index] = itemObj;
+					map[indexName][index] = item;
 				}
 			}
 		}
@@ -220,6 +216,18 @@ function StaticData(name, src) {
 		that.update(staticData[name]);
 	});
 }
+
+// create multi-dimensional object with another staticdata
+// child staticdata MUST be indexed by childKey
+StaticData.prototype.inflate = function (staticdata, parentKey, childKey) {
+	for (var i = 0, len = this._src.length; i < len; i++) {
+		var srcItem = this._src[i];
+		var child = staticdata.getOneByIndex(childKey, srcItem[parentKey]);
+		if (child) {
+			srcItem[parentKey] = child;
+		}
+	}
+};
 
 StaticData.prototype.getOneByIndex = function (indexName, key, props) {
 	if (!this._indexMap) {

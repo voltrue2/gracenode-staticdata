@@ -103,27 +103,102 @@ var example = gracenode.staticdata.create('example');
 
 ##### StaticData class
 
-> **getOneByIndex**
+######.inflate()
+<pre>
+void inflate(Object staticdata, String parentKey, String childKey)
+</pre>
+
+Combines 2 staticdata objects on `parentKey` and `childKey`.
+
+`parentKey` is the column from source staticdata and `childKey` is the column from the staticdata given to the function.
+
+**NOTE:** The child staticdata MUST be indexed by `childKey`.
+
+Example:
+
+```
+// CSV data of men.csv
+name,wife
+Bob,1
+Kevin,2
+Nathan,3
+/*
+[
+	{ "name": "Bob", "wife": 1 },
+	{ "name": "Kevin", "wife": 2 },
+	{ "name": "Nathan", "wife": 3 }
+]
+*/
+// CSV data of women.csv
+id,name
+1,Sandy
+2,Olivia
+3,Jess
+/*
+[
+	{ "id": 1, "name": "Sandy" }
+	{ "id": 2, "name": "Olivia" }
+	{ "id": 3, "name": "Jess" }
+]
+*/
+// inflate the 2 files
+var men = gracenode.staticdata.create('men');
+var women = gracenode.staticdata.create('women');
+men.inflate(women, 'wife', 'id');
+/*
+Resulting data
+[
+	{
+		"name": "Bob",
+		"wife": {
+			"id": 1,
+			"Sandy"
+		}
+	},
+	{
+		"name": "Kevin",
+		"wife": {
+			"id": 2,
+			"Olivia"
+		}
+	},
+	{
+		"name": "Nathan",
+		"wife": {
+			"id": 3,
+			"Jess"
+		}
+	}
+]
+*/
+```
+
+######.getOneByIndex()
 <pre>
 mixed getOneByIndex(String indexName, String indexKey, Array props)
 </pre>
-**getManyByIndex**
+
+######.getManyByIndex()
 <pre>
 mixed getManyByIndex(String indexName, Array indexKeyList, Array props)
 </pre>
-**getOne**
+
+######.getOne()
 <pre>
 mixed getOne(mixed key, Array props)
 </pre>
-**getMany**
+
+######.getMany()
 <pre>
 mixed getMany(Array keyList, Array props)
 </pre>
-**getAll**
+
+######.getAll()
 <pre>
 mixed getAll(Array props)
 </pre>
-**getAllByIndexName**
+
+######.getAllByIndexName()
 <pre>
 mixed getAllByIndexName(String indexName, Array props)
 </pre>
