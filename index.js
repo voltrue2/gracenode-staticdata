@@ -92,7 +92,7 @@ function readFile(path, cb) {
 	var lastDot = path.lastIndexOf('.');
 	var type = path.substring(lastDot + 1);
 	var name = path.substring(path.lastIndexOf(config.path) + config.path.length, lastDot);
-	fs.readFile(path, function (error, dataBuffer) {
+	fs.readFile(path, 'utf8', function (error, dataBuffer) {
 		if (error) {
 			return cb(error);
 		}

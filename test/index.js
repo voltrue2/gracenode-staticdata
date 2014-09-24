@@ -72,7 +72,7 @@ describe('gracenode staticdata module ->', function () {
 		}
 	});
 
-	it('Can remove none-printable characters from CSV files', function () {
+	it('Can remove BOM (byte order mark) from CSV files', function () {
 		var sd = gn.staticdata.create('sample');
 		var data = sd.getOneByIndex('level', 1);
 		assert(data);
