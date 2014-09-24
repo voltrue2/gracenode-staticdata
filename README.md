@@ -116,7 +116,7 @@ Combines 2 staticdata objects on `parentKey` and `childKey`.
 
 Example:
 
-```
+```javascript
 // CSV data of men.csv
 name,wife
 Bob,1

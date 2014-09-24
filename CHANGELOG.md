@@ -2,6 +2,26 @@
 
 This is a manually maintained update history log.
 
+## Version 0.2.2
+
+## Added
+
+####.inflate() added to staticdata
+
+## Changed
+
+None
+
+## Deprecated
+
+None
+
+## Removed
+
+None
+
+***
+
 ## Version 0.2.1
 
 ## Added
