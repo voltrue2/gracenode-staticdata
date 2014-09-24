@@ -23,8 +23,6 @@ function parse(filePath, data) {
 	var list = [];
 	var rows = separateRows(data);
 	for (var i = 0, len = rows.length; i < len; i++) {
-		// remove none-printable characters from the data
-		rows[i] = rows[i].replace(nonePrintable, '');
 		var separated = separateColumns(rows[i]);
 		if (separated.length) {
 			list.push(separated);
@@ -91,6 +89,8 @@ function typeCast(data) {
 	if (data.substring(data.length - 1) === '"') {
 		data = data.substring(0, data.length - 1);
 	}
+	// remove none-printable characters
+	data = data.replace(nonePrintable, '');
 	// cast type
 	if (data && data.indexOf('0x') === -1 && !isNaN(data)) {
 		// numeric data

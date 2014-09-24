@@ -2,6 +2,26 @@
 
 This is a manually maintained update history log.
 
+## Version 0.2.1
+
+## Added
+
+None
+
+## Changed
+
+#### Removal of none-printable characters now does not break tab separated data
+
+## Deprecated
+
+None
+
+## Removed
+
+None
+
+***
+
 ## Version 0.2.0
 
 ## Added
