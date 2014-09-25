@@ -81,13 +81,21 @@ describe('gracenode staticdata module ->', function () {
 	it('Can inflate a staticdata object with another', function () {
 		var parent = gn.staticdata.create('parent');
 		var child = gn.staticdata.create('child');
-		parent.inflate(child, 'size', 'size');
+		var success = parent.inflate(child, 'size', 'size');
 		var logger = gn.log.create('test');
 		var bob = parent.getOneByIndex('name', 'Bob');
+		assert.equal(success, true);
 		assert.equal(bob.name, 'Bob');
 		assert.equal(bob.size.size, 10);
 		assert.equal(bob.size.name, 'Regular');
 		assert.equal(bob.size.id, 3);
+	});
+
+	it('Can fail to inflate staticdata object with none-indexed child staticdata', function () {
+		var sample = gn.staticdata.create('sample');
+		var tab = gn.staticdata.create('tab');
+		var success = sample.inflate(tab, 'id', 'id');
+		assert.equal(success, false);
 	});
 
 });

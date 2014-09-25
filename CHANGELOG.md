@@ -2,6 +2,26 @@
 
 This is a manually maintained update history log.
 
+## Version 0.2.3
+
+## Added
+
+None
+
+## Changed
+
+#### .inflate() improved error checks
+
+## Deprecated
+
+None
+
+## Removed
+
+None
+
+***
+
 ## Version 0.2.2
 
 ## Added

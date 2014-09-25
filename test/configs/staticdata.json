@@ -4,14 +4,7 @@
 			"bufferSize": 0,
 			"console": true,
 			"color": true,
-			"level": {
-				"verbose": true,
-				"debug": true,
-				"info": true,
-				"warnging": true,
-				"error": true,
-				"fatal": true
-			}
+			"level": ">= verbose"
 		},
 		"gracenode-staticdata": {
 			"path": "gracenode-staticdata/test/data/",

@@ -208,7 +208,7 @@ function mapIndex(data, indexNames) {
 function StaticData(name, src) {
 	this._name = name;
 	this._src = src.data;
-	this._indexMap = src.indexMap;
+	this._indexMap = src.indexMap || {};
 
 	// file change listener
 	var that = this;
@@ -219,14 +219,25 @@ function StaticData(name, src) {
 
 // create multi-dimensional object with another staticdata
 // child staticdata MUST be indexed by childKey
-StaticData.prototype.inflate = function (staticdata, parentKey, childKey) {
+StaticData.prototype.inflate = function (childStaticdata, parentKey, childKey) {
+	var success = false;
+	// check to see if the child staticdata has been indexed by childKey or not
+	if (!childStaticdata._indexMap[childKey]) {
+		log.error('failed to inflate staticdata [' + this._name + ']: child staticdata [' + childStaticdata._name + '] MUST be index by "' + childKey + '"');
+		return success;
+	}
+	// now inflate the staticdata with childStaticdata
 	for (var i = 0, len = this._src.length; i < len; i++) {
 		var srcItem = this._src[i];
-		var child = staticdata.getOneByIndex(childKey, srcItem[parentKey]);
+		var child = childStaticdata.getOneByIndex(childKey, srcItem[parentKey]);
 		if (child) {
 			srcItem[parentKey] = child;
+			if (!success) {
+				success = true;
+			}
 		}
 	}
+	return success;
 };
 
 StaticData.prototype.getOneByIndex = function (indexName, key, props) {
